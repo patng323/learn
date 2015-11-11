@@ -52,12 +52,11 @@ r1 = PtG * G[0,:].reshape(-1,1) # Now r1 will not get recommendation for the 3rd
 ###################################
 ###################################
 
-A = np.matrix([[1,0,1,0], [1,0,1,1], [0,1,1,1]]) # History of purchase
-A
+A = np.matrix([[1,0,1,0,0,0], [1,0,1,0,1,0], [0,1,1,1,0,0], [0,1,0,1,0,1], [0,0,0,0,0,0]]) # History of purchase
 
-h = np.matrix([1,0,0,0]).reshape([4,1]) # vector of things
-
-A * np.matrix([1,0,0,0]).reshape([4,1]) # Each user's value = # of times he purchased item(s) specified
-A * np.matrix([0,1,0,0]).reshape([4,1]) # vector of users who both purchased item 2
-A * np.matrix([0,0,1,0]).reshape([4,1]) # vector of users who both purchased item 3
-A * np.matrix([0,0,1,1]).reshape([4,1]) # vector of users who both purchased item 3 + item 4
+# In the following examples, each value in the vector represents the total # of items the user has purchased
+# from the specified product mix.
+print "Item 3:", (A * np.matrix([0,0,1,0,0,0]).transpose()).tolist() # Call .tolist() just for ease of viewing
+print "Item 4:", (A * np.matrix([0,0,0,1,0,0]).transpose()).tolist()
+print "Item 3 and 4:", (A * np.matrix([0,0,1,1,0,0]).transpose()).tolist()
+print "Item 1 and 3:", (A * np.matrix([1,0,1,0,0,0]).transpose()).tolist()
