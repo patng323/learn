@@ -1,0 +1,4 @@
+pio status
+pio app data-delete test1
+
+- pio import --appid 1 --input export.txt  # Batch import
