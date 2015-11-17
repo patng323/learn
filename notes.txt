@@ -2,3 +2,89 @@ pio status
 pio app data-delete test1
 
 - pio import --appid 1 --input export.txt  # Batch import
+
+
+# Recommendation for u2
+curl -H "Content-Type: application/json" -d '
+{
+    "user": "u2",
+}' http://localhost:8000/queries.json
+
+curl -H "Content-Type: application/json" -d '
+{
+    "user": "u5",
+}' http://localhost:8000/queries.json
+
+curl -H "Content-Type: application/json" -d '
+{
+    "user": "new-user",
+}' http://localhost:8000/queries.json
+
+######## Effect of View
+curl -H "Content-Type: application/json" -d '
+{
+    "user": "u5",
+}' http://localhost:8000/queries.json
+
+######## More effects from Search Engine
+
+# Boost Tablets
+curl -H "Content-Type: application/json" -d '
+{
+    "user": "u2",
+    "fields": [
+	    {
+    	    "name": "categories",
+        	"values": ["Tablets"],
+        	"bias": 3
+	    },
+    ]
+}' http://localhost:8000/queries.json
+
+# Boost high price item
+curl -H "Content-Type: application/json" -d '
+{
+    "user": "u2",
+    "fields": [
+	    {
+    	    "name": "price",
+        	"values": ["high"],
+        	"bias": 10
+	    },
+    ]
+}' http://localhost:8000/queries.json
+
+# Boost Microsoft
+curl -H "Content-Type: application/json" -d '
+{
+    "user": "u2",
+    "fields": [
+	    {
+    	    "name": "categories",
+        	"values": ["Microsoft"],
+        	"bias": 10
+	    },
+    ]
+}' http://localhost:8000/queries.json
+
+# Show only low price items
+curl -H "Content-Type: application/json" -d '
+{
+    "user": "u2",
+    "fields": [
+	    {
+    	    "name": "price",
+        	"values": ["low"],
+        	"bias": -1
+	    },
+    ]
+}' http://localhost:8000/queries.json
+
+# Simply the popular items
+curl -H "Content-Type: application/json" -d '
+{
+    "user": "",
+}' http://localhost:8000/queries.json
+
+
+######################################################
