@@ -1,0 +1,31 @@
+<style>
+html *
+{
+   color: #000 !important;
+   font-family: Arial !important;
+}
+
+table, th, td
+{
+    border: 1px solid black;
+    border-collapse:collapse;
+}
+th, td {
+    padding: 10px;
+}
+</style>
+
+<h2>Search Result</h2>
+User Id = {{userid}}<p/>
+
+
+<table>
+{% for item in items %}
+    <tr>
+        <td>{{ item.item }}</td>
+        <td>{{ item.productName}}</td>
+        <td><img src="{{ item.img }}"></td>
+        <td>{{ item.score }}</td>
+    </tr>
+{% endfor %}
+</table>
