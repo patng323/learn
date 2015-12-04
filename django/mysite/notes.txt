@@ -17,5 +17,10 @@ curl -H "Content-Type: application/json" -d '
 curl -H "Content-Type: application/json" -d '
 {
     "user": "u1",
-    "item": "Surface"
+    "item": "Iphone 4"
+}' http://localhost:8000/queries.json
+
+curl -H "Content-Type: application/json" -d '
+{
+    "item": "Iphone 4"
 }' http://localhost:8000/queries.json
