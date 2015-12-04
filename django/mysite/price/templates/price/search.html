@@ -15,22 +15,40 @@ th, td {
 }
 </style>
 
-<h2>Search Result</h2>
-User Id = {{userid}}<p/>
+<h2>Input</h2>
+<table>
+    <tr>
+        <td>User:</td>
+        <td>{{userid}}</td>
+    </tr>
+    <tr>
+        <td>Product:</td>
+        <td>{{ itemid }}</td>
+        <td>{{ itemProduct.brand }}</td>
+        <td>{{ itemProduct.name}}</td>
+        <td>{{ itemProduct.cat }}</td>
+        <td><img src="{{ itemProduct.img }}" style="width: 8%; height: 8%"></td>
+    </tr>
+</table>
 
-
+<br/>
+<h2>Result:</h2>
 <table>
     <tr>
         <th>Item Id</th>
+        <th>Brand</th>
         <th>Name</th>
+        <th>Category</th>
         <th>Image</th>
         <th>Score</th>
     </tr>
 {% for item in items %}
     <tr>
         <td>{{ item.item }}</td>
-        <td>{{ item.productName}}</td>
-        <td><img src="{{ item.img }}" style="width: 30%; height: 30%"></td>
+        <td>{{ item.product.brand }}</td>
+        <td>{{ item.product.name}}</td>
+        <td>{{ item.product.cat }}</td>
+        <td><img src="{{ item.product.img }}" style="width: 8%; height: 8%"></td>
         <td>{{ item.score }}</td>
     </tr>
 {% endfor %}
