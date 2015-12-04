@@ -48,7 +48,7 @@ def search(request):
         # Add price product name and photos
         for item in items:
             productId = item['item']
-            productId = 215606
+            #productId = 215606
 
             productName, imgPath = getPriceProductInfo(productId)
 

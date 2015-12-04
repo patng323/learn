@@ -4,14 +4,13 @@ python manage.py runserver
 Xpath:
 
 Product name:
-
 /x:html/x:body/x:div[2]/x:div[2]/x:div/x:div/x:div/x:div/x:div/x:div[1]/x:div[2]/x:div/x:div[1]/x:div/x:div[2]/x:div[2]/x:span[2]
 
 id('product-image-img')
 
 curl -H "Content-Type: application/json" -d '
 {
-    "user": "u1"
+    "user": "stranger"
 }' http://localhost:8000/queries.json
 
 curl -H "Content-Type: application/json" -d '

@@ -11,7 +11,7 @@ table, th, td
     border-collapse:collapse;
 }
 th, td {
-    padding: 10px;
+    padding: 6px;
 }
 </style>
 
@@ -20,11 +20,17 @@ User Id = {{userid}}<p/>
 
 
 <table>
+    <tr>
+        <th>Item Id</th>
+        <th>Name</th>
+        <th>Image</th>
+        <th>Score</th>
+    </tr>
 {% for item in items %}
     <tr>
         <td>{{ item.item }}</td>
         <td>{{ item.productName}}</td>
-        <td><img src="{{ item.img }}"></td>
+        <td><img src="{{ item.img }}" style="width: 30%; height: 30%"></td>
         <td>{{ item.score }}</td>
     </tr>
 {% endfor %}
