@@ -15,22 +15,26 @@ th, td {
 }
 </style>
 
-<h2>Input</h2>
+<h2>Input:</h2>
+<form action="">
 <table>
     <tr>
         <td>User:</td>
-        <td>{{userid}}</td>
+        <td><input name="u" type="text" value="{{userid}}"></td>
     </tr>
     <tr>
         <td>Product:</td>
-        <td>{{ itemid }}</td>
+        <td><input name="i" type="text" value="{{ itemid }}"></td>
         <td>{{ itemProduct.brand }}</td>
         <td>{{ itemProduct.name}}</td>
         <td>{{ itemProduct.cat }}</td>
         <td><img src="{{ itemProduct.img }}" style="width: 8%; height: 8%"></td>
     </tr>
+    <tr>
+        <td colspan="6" align="center"><input type="submit" value="Submit"></td>
+    </tr>
 </table>
-
+</form>
 <br/>
 <h2>Result:</h2>
 <table>
