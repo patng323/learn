@@ -8,24 +8,26 @@ import json
 from lxml import html
 import requests
 from urlparse import urlparse
-
+from price import productDf
 
 # Create your views here.
 def index(request):
     context = {'irange': range(5)}
     return render(request, 'price/index.html', context)
 
-def getPriceProductInfo(productId):
+def getPriceProductInfofromWeb(productId):
     url = 'http://www.price.com.hk/product.php?p=' + str(productId)
-    page = requests.get(url)
+    page = requests.get(url, timeout=10)
     parsedUrl = urlparse(url)
     basePath = parsedUrl.scheme + "://" + parsedUrl.hostname
 
     tree = html.fromstring(page.content)
 
-    productName = tree.xpath('//*[contains(@class, "product-name")]')[0].text
-    img = tree.xpath('//*[contains(@id, "product-image-img")]')[0].attrib['src']
-    imgPath = basePath + img
+    node = tree.xpath('//*[contains(@class, "product-name")]')
+    productName = '!! Not found !!' if node is None or len(node) == 0 else node[0].text
+
+    node = tree.xpath('//*[contains(@id, "product-image-img")]')
+    imgPath = '' if node is None or len(node) == 0 else basePath + node[0].attrib['src']
 
     return productName, imgPath
 
@@ -39,23 +41,39 @@ def searchPio(critera):
 
         return result['itemScores']
 
+def getItemProduct(productId = None):
+        itemProduct = {'brand':'', 'name':'', 'cat':''}
+
+        if productId is not None:
+            try:
+                product = productDf.loc[int(productId)]
+                itemProduct = product.to_dict()
+                itemProduct['cat'] = product['c0'] + " / " + product['c1'] + " / " + product['c2']
+            except:
+                pass
+
+        return itemProduct
+
 def search(request):
-    userid = request.GET.get('u', '')
-    if len(userid) > 0:
-        criteria = { "user": userid }
-        items = searchPio(criteria)
 
-        # Add price product name and photos
-        for item in items:
-            productId = item['item']
-            productId = 215606
+    userId = request.GET.get('u', '')
+    itemId = request.GET.get('i', '')
+    itemProduct = getItemProduct()
 
-            productName, imgPath = getPriceProductInfo(productId)
+    if len(userId) > 0:
+        criteria = { "user": userId }
+    elif len(itemId) > 0:
+        criteria = { "item": itemId}
+        itemProduct = getItemProduct(itemId)
 
-            item['productName'] = productName
-            item['img'] = imgPath
+    items = searchPio(criteria)
 
-        context = { 'items': items, 'userid': userid}
+    for item in items:
+        productId = int(item['item'])
+        item['product'] = getItemProduct(productId)
+
+    if items is not None:
+        context = { 'items': items, 'userid': userId, 'itemid': itemId, 'itemProduct': itemProduct}
         return render(request, 'price/search.html', context)
     else:
-        return HttpResponse("Search is called: user=%s" % userid)
+        return HttpResponse("Search is called: user=%s" % userId)

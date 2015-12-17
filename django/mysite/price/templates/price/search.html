@@ -11,20 +11,48 @@ table, th, td
     border-collapse:collapse;
 }
 th, td {
-    padding: 10px;
+    padding: 6px;
 }
 </style>
 
-<h2>Search Result</h2>
-User Id = {{userid}}<p/>
-
-
+<h2>Input:</h2>
+<form action="">
 <table>
+    <tr>
+        <td>User:</td>
+        <td><input name="u" type="text" value="{{userid}}"></td>
+    </tr>
+    <tr>
+        <td>Product:</td>
+        <td><input name="i" type="text" value="{{ itemid }}"></td>
+        <td>{{ itemProduct.brand }}</td>
+        <td>{{ itemProduct.name}}</td>
+        <td>{{ itemProduct.cat }}</td>
+        <td><img src="{{ itemProduct.img }}" style="width: 8%; height: 8%"></td>
+    </tr>
+    <tr>
+        <td colspan="6" align="center"><input type="submit" value="Submit"></td>
+    </tr>
+</table>
+</form>
+<br/>
+<h2>Result:</h2>
+<table>
+    <tr>
+        <th>Item Id</th>
+        <th>Brand</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Image</th>
+        <th>Score</th>
+    </tr>
 {% for item in items %}
     <tr>
         <td>{{ item.item }}</td>
-        <td>{{ item.productName}}</td>
-        <td><img src="{{ item.img }}"></td>
+        <td>{{ item.product.brand }}</td>
+        <td>{{ item.product.name}}</td>
+        <td>{{ item.product.cat }}</td>
+        <td><img src="{{ item.product.img }}" style="width: 8%; height: 8%"></td>
         <td>{{ item.score }}</td>
     </tr>
 {% endfor %}
