@@ -1,3 +1,4 @@
+#from __future__ import unicode_literals
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import RequestContext, loader
@@ -37,9 +38,7 @@ def searchPio(critera):
         jsonStr = JSONEncoder().encode(critera)
         req = urllib2.Request(url, data=jsonStr, headers=headers)
         response = urllib2.urlopen(req)
-        result = json.loads(response.read())
-
-        return result['itemScores']
+        return json.loads(response.read())
 
 def getItemProduct(productId = None):
         itemProduct = {'brand':'', 'name':'', 'cat':''}
@@ -58,22 +57,39 @@ def search(request):
 
     userId = request.GET.get('u', '')
     itemId = request.GET.get('i', '')
+    cat = request.GET.get('c', '')
     itemProduct = getItemProduct()
 
     if len(userId) > 0:
-        criteria = { "user": userId }
+        criteria = { "user": userId, "getHistory": True }
+        if len(cat) > 0:
+            criteria['fields'] = [
+                         {
+                             "name":"categories",
+                             "values":cat.split(','),
+                             "bias":-1
+                         }
+                     ]
+
     elif len(itemId) > 0:
         criteria = { "item": itemId}
         itemProduct = getItemProduct(itemId)
 
-    items = searchPio(criteria)
+    result = searchPio(criteria)
+    items = result['itemScores']
+    history = result['historyItems']
 
     for item in items:
-        productId = int(item['item'])
-        item['product'] = getItemProduct(productId)
+        item['product'] = getItemProduct(item['item'])
+
+    history = sorted(history, key=lambda h: h['event'])
+    for h in history:
+        h['product'] = getItemProduct(h['item'])
 
     if items is not None:
-        context = { 'items': items, 'userid': userId, 'itemid': itemId, 'itemProduct': itemProduct}
+        context = { 'items': items, 'userid': userId, 'itemid': itemId, 'itemProduct': itemProduct,
+                    'cat': cat,
+                    'history': history}
         return render(request, 'price/search.html', context)
     else:
         return HttpResponse("Search is called: user=%s" % userId)

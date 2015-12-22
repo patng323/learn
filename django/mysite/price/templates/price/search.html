@@ -31,11 +31,18 @@ th, td {
         <td><img src="{{ itemProduct.img }}" style="width: 8%; height: 8%"></td>
     </tr>
     <tr>
+        <td>Category Filter:</td>
+        <td><input name="c" type="text" value="{{cat}}"></td>
+    </tr>
+    <tr>
         <td colspan="6" align="center"><input type="submit" value="Submit"></td>
     </tr>
 </table>
 </form>
 <br/>
+<table>
+    <tr>
+        <td valign="top">
 <h2>Result:</h2>
 <table>
     <tr>
@@ -52,8 +59,34 @@ th, td {
         <td>{{ item.product.brand }}</td>
         <td>{{ item.product.name}}</td>
         <td>{{ item.product.cat }}</td>
-        <td><img src="{{ item.product.img }}" style="width: 8%; height: 8%"></td>
+        <td><img src="{{ item.product.img }}" style="width: 18%; height: 18%"></td>
         <td>{{ item.score }}</td>
     </tr>
 {% endfor %}
 </table>
+<br/>
+        </td>
+        <td valign="top">
+<h2>History:</h2>
+<table>
+    <tr>
+        <th>Action</th>
+        <th>Item Id</th>
+        <th>Brand</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Image</th>
+    </tr>
+{% for item in history %}
+    <tr>
+        <td>{{ item.event }}</td>
+        <td>{{ item.item }}</td>
+        <td>{{ item.product.brand }}</td>
+        <td>{{ item.product.name}}</td>
+        <td>{{ item.product.cat }}</td>
+        <td><img src="{{ item.product.img }}" style="width: 18%; height: 18%"></td>
+    </tr>
+{% endfor %}
+</table></td>
+    </tr>
+    </table>
