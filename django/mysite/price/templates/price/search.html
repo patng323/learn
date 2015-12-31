@@ -28,11 +28,25 @@ th, td {
         <td>{{ itemProduct.brand }}</td>
         <td>{{ itemProduct.name}}</td>
         <td>{{ itemProduct.cat }}</td>
-        <td><img src="{{ itemProduct.img }}" style="width: 8%; height: 8%"></td>
+        <td><img src="{{ itemProduct.img }}" style="height: 15%"></td>
     </tr>
     <tr>
         <td>Category Filter:</td>
-        <td><input name="c" type="text" value="{{cat}}"></td>
+        <td><input name="cat" type="text" value="{{cat}}"></td>
+        <td>Factor:</td>
+        <td><input name="catFactor" type="text" value="{{catFactor}}"></td>
+    </tr>
+    <tr>
+        <td>Brand Boost:</td>
+        <td><input name="brandBst" type="text" value="{{brandBst}}"></td>
+        <td>Factor:</td>
+        <td><input name="brandFactor" type="text" value="{{brandFactor}}"></td>
+    </tr>
+    <tr>
+        <td>Price Level Boost:</td>
+        <td><input name="priceBst" type="text" value="{{priceBst}}"></td>
+        <td>Factor:</td>
+        <td><input name="priceFactor" type="text" value="{{priceFactor}}"></td>
     </tr>
     <tr>
         <td colspan="6" align="center"><input type="submit" value="Submit"></td>
@@ -50,6 +64,7 @@ th, td {
         <th>Brand</th>
         <th>Name</th>
         <th>Category</th>
+        <th>Price Lvl</th>
         <th>Image</th>
         <th>Score</th>
     </tr>
@@ -59,7 +74,8 @@ th, td {
         <td>{{ item.product.brand }}</td>
         <td>{{ item.product.name}}</td>
         <td>{{ item.product.cat }}</td>
-        <td><img src="{{ item.product.img }}" style="width: 18%; height: 18%"></td>
+        <td>{{ item.product.priceLevel }}</td>
+        <td><img src="{{ item.product.img }}" style="height: 15%"></td>
         <td>{{ item.score }}</td>
     </tr>
 {% endfor %}
@@ -84,7 +100,7 @@ th, td {
         <td>{{ item.product.brand }}</td>
         <td>{{ item.product.name}}</td>
         <td>{{ item.product.cat }}</td>
-        <td><img src="{{ item.product.img }}" style="width: 18%; height: 18%"></td>
+        <td><img src="{{ item.product.img }}" style="height: 15%"></td>
     </tr>
 {% endfor %}
 </table></td>
