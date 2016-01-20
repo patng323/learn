@@ -57,27 +57,51 @@ def search(request):
 
     userId = request.GET.get('u', '')
     itemId = request.GET.get('i', '')
-    cat = request.GET.get('c', '')
+    cat = request.GET.get('cat', '')
+    catFactor = request.GET.get('catFactor', '2.5')
+    brandBst = request.GET.get('brandBst', '')
+    brandFactor = request.GET.get('brandFactor', '2.5')
+    priceBst = request.GET.get('priceBst', '')
+    priceFactor = request.GET.get('priceFactor', '2.5')
     itemProduct = getItemProduct()
+    criteria = {}
 
     if len(userId) > 0:
-        criteria = { "user": userId, "getHistory": True }
-        if len(cat) > 0:
-            criteria['fields'] = [
-                         {
-                             "name":"categories",
-                             "values":cat.split(','),
-                             "bias":-1
-                         }
-                     ]
+        criteria["user"] = userId
+        criteria["getHistory"] = True
 
-    elif len(itemId) > 0:
-        criteria = { "item": itemId}
+    if len(itemId) > 0:
+        criteria["item"] = itemId
         itemProduct = getItemProduct(itemId)
 
-    result = searchPio(criteria)
-    items = result['itemScores']
-    history = result['historyItems']
+    addBoostOrFilter("categories", cat, catFactor, criteria)
+    addBoostOrFilter("brand", brandBst, brandFactor, criteria)
+    addBoostOrFilter("level", priceBst, priceFactor, criteria)
+
+    # if len(brandBst) > 0:
+    #     criteria['fields'] = criteria.get('fields', []) + [
+    #                      {
+    #                          "name":"brand",
+    #                          "values":brandBst.split(','),
+    #                          "bias":float(brandFactor)
+    #                      }
+    #     ]
+    #
+    # if len(priceBst) > 0:
+    #     criteria['fields'] = criteria.get('fields', []) + [
+    #                      {
+    #                          "name":"level",
+    #                          "values":priceBst.split(','),
+    #                          "bias":float(priceFactor)
+    #                      }
+    #     ]
+
+    if len(criteria) > 0:
+        result = searchPio(criteria)
+        items = result['itemScores']
+        history = result['historyItems']
+    else:
+        result = items = history = []
 
     for item in items:
         item['product'] = getItemProduct(item['item'])
@@ -89,7 +113,23 @@ def search(request):
     if items is not None:
         context = { 'items': items, 'userid': userId, 'itemid': itemId, 'itemProduct': itemProduct,
                     'cat': cat,
+                    'catFactor': catFactor,
+                    'brandBst': brandBst,
+                    'brandFactor': brandFactor,
+                    'priceBst': priceBst,
+                    'priceFactor': priceFactor,
                     'history': history}
         return render(request, 'price/search.html', context)
     else:
         return HttpResponse("Search is called: user=%s" % userId)
+
+
+def addBoostOrFilter(fieldName, bstStr, bstFactor, criteria):
+    if len(bstStr) > 0:
+        criteria['fields'] = criteria.get('fields', []) + [
+            {
+                "name": fieldName,
+                "values": bstStr.split(','),
+                "bias": float(bstFactor)
+            }
+        ]
