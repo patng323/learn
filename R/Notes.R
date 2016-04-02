@@ -78,11 +78,11 @@ sum(a==2) # How many 2's are in the vector.
 # Get random numbers from a uniform distribution
 runif(4, min=-1, max=1) #[1]  0.4361306  0.2519430  0.2532553 -0.4403405
 
-# Get a random sample of 10 integers between 1 and 100
+# Get a random sample of 4 integers between 1 and 100, with replacement
 sample(100, 4, replace=F)
 
 # 4 random integers from 500-600, with replacement.
-s = sample(500:600, 100, replace=T)
+s = sample(500:600, 4, replace=T)
 s[(order(s))] # Display the sorted result
 
 #######################
@@ -149,6 +149,11 @@ length(score2) # length of a vector: 5
 length(score2[!is.na(score2)]) # lenght of a vector without NA
 nrow(pr) # number of rows: 5
 ncol(pr) # of columns: 4
+
+##### See data summary
+summary(pr)
+library(Hmisc)
+describe(pr)
 
 ######## Select rows
 head(pr, n=2) # First two rows of pr
@@ -425,6 +430,7 @@ qnorm(p = 0.975, mean=0, sd=1)
 # Generate 10 numbers from a standard normal distribution
 rnorm(n=10, mean=0, sd=1)
 
+
 #########
 # print something on the screen
 cat(sprintf("My age is: %d", 44))
@@ -488,4 +494,37 @@ prop.table(t,2) # Display probability table, calculated by col (sum of each col 
 # List of five 1's, followed by five 2's,....by five 6's.
 l <- unlist(lapply(1:6, function(x) rep(x,5)))
 l
+
+####
+## create a function that will evaluate the students' percentiles
+pct.fun <- ecdf(d$test.score)
+d[ , percentile := pct.fun(test.score) ]
+
+####
+## Using Stargazer to view the summary of multiple models
+library(stargazer)
+
+x <- sample(c(0,2), 100, TRUE)
+z <- sample(c(0,5), 100, TRUE)
+y <- 5 + x*9 + rnorm(100)
+
+m1 <- lm(y ~ 1 + x)
+m2 <- lm(y ~ 1 + x + z)
+m3 <- lm(y ~ 1 + x + I(0*z))
+
+stargazer(m1, m2, m3, type = "text", omit.stat = c("all"))
+
+####
+## Find number of NA in each column of a dataframe
+# 2 means col.
+# Details: https://nsaunders.wordpress.com/2010/08/20/a-brief-introduction-to-apply-in-r/
+apply(dt, 2, function(x) sum(is.na(x)) )  
+
+####
+## Custom printf
+printf <- function(...) cat(sprintf(...))
+
+####
+# Check if the records are complete (no missing value) or not.
+dat <- dat[complete.cases(dat), ]
 
